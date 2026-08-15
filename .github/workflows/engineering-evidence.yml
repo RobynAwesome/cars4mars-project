@@ -35,5 +35,10 @@ jobs:
           g++ -std=c++17 -Wall -Wextra -Werror firmware/teensy/native_safety_test.cpp -o /tmp/c4m_safety_test
           /tmp/c4m_safety_test
 
+      - name: Compile and run embedded command processor
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror firmware/teensy/native_processor_test.cpp -o /tmp/c4m_processor_test
+          /tmp/c4m_processor_test
+
       - name: Validate requirements and evidence ledger
         run: python tools/validate_evidence.py
