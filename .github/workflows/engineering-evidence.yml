@@ -22,8 +22,37 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Run deterministic control tests
+      - name: Run deterministic software tests
         run: python -m unittest discover -s tests -v
+
+      - name: Run deterministic rover simulations
+        run: |
+          rm -rf /tmp/cars4mars-sim
+          python tools/run_simulations.py --out /tmp/cars4mars-sim
+          test -s /tmp/cars4mars-sim/scenario_contract.json
+          test -s /tmp/cars4mars-sim/grade45-ideal-lower-bound.json
+          test -s /tmp/cars4mars-sim/grade45-lossy-hypothesis.json
+          test -s /tmp/cars4mars-sim/grade45-traction-limited.json
+          test -s /tmp/cars4mars-sim/heartbeat-loss-stop-envelope.json
+          test -s /tmp/cars4mars-sim/grade45-sensitivity.json
+
+      - name: Compile and run embedded protocol golden vector
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror firmware/teensy/native_test.cpp -o /tmp/c4m_protocol_test
+          /tmp/c4m_protocol_test
+
+      - name: Compile and run embedded safety core
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror firmware/teensy/native_safety_test.cpp -o /tmp/c4m_safety_test
+          /tmp/c4m_safety_test
+
+      - name: Compile and run embedded command processor
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror firmware/teensy/native_processor_test.cpp -o /tmp/c4m_processor_test
+          /tmp/c4m_processor_test
 
       - name: Validate requirements and evidence ledger
         run: python tools/validate_evidence.py
+
+      - name: Validate engineering challenge matrix
+        run: python tools/validate_challenge_matrix.py
