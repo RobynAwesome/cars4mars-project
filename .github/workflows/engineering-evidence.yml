@@ -42,3 +42,6 @@ jobs:
 
       - name: Validate requirements and evidence ledger
         run: python tools/validate_evidence.py
+
+      - name: Validate engineering challenge matrix
+        run: python tools/validate_challenge_matrix.py
