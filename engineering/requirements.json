@@ -1,0 +1,117 @@
+{
+  "baseline": "DFR-01",
+  "baseline_date": "2026-08-02",
+  "truth_boundary": "Requirements describe design intent until the linked verification evidence exists.",
+  "requirements": [
+    {
+      "id": "C4M-SAFE-001",
+      "name": "Emergency stop authority",
+      "requirement": "E-stop shall force zero commanded velocity and remove motor enable.",
+      "owner_layer": "Teensy/power-stage safety boundary",
+      "design_state": "locked",
+      "software_artifact": "cars4mars/control.py",
+      "software_test": "tests/test_control.py::SafetyControllerTests::test_estop_is_latched_and_requires_explicit_reset",
+      "physical_gate": "Record E-stop activation removing motor energy on the assembled rover.",
+      "validation_state": "software_model_only"
+    },
+    {
+      "id": "C4M-SAFE-002",
+      "name": "Loss-of-liveness fail-stop",
+      "requirement": "More than 500 ms without valid command or heartbeat activity shall force zero velocity and remove motor enable.",
+      "owner_layer": "Teensy control boundary",
+      "design_state": "locked",
+      "software_artifact": "cars4mars/control.py",
+      "software_test": "tests/test_control.py::SafetyControllerTests::test_liveness_watchdog_opens_motor_enable",
+      "physical_gate": "Record command-link loss and measured stop/contactor response on hardware.",
+      "validation_state": "software_model_only"
+    },
+    {
+      "id": "C4M-SAFE-003",
+      "name": "Stale motion prevention",
+      "requirement": "A heartbeat shall not keep stale non-zero motion alive after the command lease expires.",
+      "owner_layer": "Teensy control boundary",
+      "design_state": "derived_safety_control",
+      "software_artifact": "cars4mars/control.py",
+      "software_test": "tests/test_control.py::SafetyControllerTests::test_command_lease_expires_even_if_heartbeat_remains_fresh",
+      "physical_gate": "Bench test command loss while heartbeat remains active; wheels must return to zero command.",
+      "validation_state": "software_model_only"
+    },
+    {
+      "id": "C4M-AUTH-001",
+      "name": "Bounded perception authority",
+      "requirement": "Jetson/autonomy requests shall pass through the same local command bounds and safety checks as manual requests.",
+      "owner_layer": "Teensy control boundary",
+      "design_state": "locked",
+      "software_artifact": "cars4mars/control.py",
+      "software_test": "tests/test_control.py::SafetyControllerTests::test_autonomy_has_no_safety_bypass",
+      "physical_gate": "Integrate Jetson-to-Teensy protocol and record rejection of an out-of-bounds autonomy request.",
+      "validation_state": "software_model_only"
+    },
+    {
+      "id": "C4M-AUTH-002",
+      "name": "No cloud or LLM motor authority",
+      "requirement": "No cloud service, LLM, or evidence/governance service shall directly command the motor drivers or motor-enable contactor.",
+      "owner_layer": "system architecture",
+      "design_state": "locked",
+      "software_artifact": "docs/architecture/DFR-01.md",
+      "software_test": null,
+      "physical_gate": "Wiring/interface review demonstrates that motor authority terminates at the local deterministic control/power boundary.",
+      "validation_state": "design_only"
+    },
+    {
+      "id": "C4M-MOB-001",
+      "name": "Traversal architecture",
+      "requirement": "Rover shall use six-wheel skid-steer with passive rocker-bogie as the DFR-01 mobility baseline.",
+      "owner_layer": "mechanical",
+      "design_state": "locked",
+      "software_artifact": "docs/architecture/DFR-01.md",
+      "software_test": null,
+      "physical_gate": "Loaded forward/reverse, turning, obstacle and ramp footage with conditions recorded.",
+      "validation_state": "design_only"
+    },
+    {
+      "id": "C4M-MASS-001",
+      "name": "Competition mass ceiling",
+      "requirement": "Complete starting rover configuration shall be no more than 40 kg; DFR-01 targets 28 kg BOM mass and uses a 30 kg engineering load case.",
+      "owner_layer": "systems/mechanical",
+      "design_state": "locked",
+      "software_artifact": "docs/architecture/DFR-01.md",
+      "software_test": null,
+      "physical_gate": "Dated full-configuration scale reading and mass ledger.",
+      "validation_state": "design_only"
+    },
+    {
+      "id": "C4M-PAY-001",
+      "name": "Mission payload transport",
+      "requirement": "Rover shall provide a low central 350 x 300 x 180 mm tray capable of retaining the judge-supplied mission object up to 1 kg.",
+      "owner_layer": "mechanical",
+      "design_state": "locked",
+      "software_artifact": "docs/architecture/DFR-01.md",
+      "software_test": null,
+      "physical_gate": "1 kg retained through turns, bumps, ramp traversal and emergency stop.",
+      "validation_state": "design_only"
+    },
+    {
+      "id": "C4M-COMMS-001",
+      "name": "Local command/video network",
+      "requirement": "Local Wi-Fi shall carry command and video; the design shall not require external internet for rover command.",
+      "owner_layer": "communications",
+      "design_state": "locked",
+      "software_artifact": "docs/architecture/DFR-01.md",
+      "software_test": null,
+      "physical_gate": "Continuous command/video run at nominal and event-range test distances.",
+      "validation_state": "design_only"
+    },
+    {
+      "id": "C4M-COMMS-002",
+      "name": "LoRa scope restriction",
+      "requirement": "RFM95W LoRa shall be limited to heartbeat/fail-stop support and shall not carry video or direct driving commands.",
+      "owner_layer": "communications/safety",
+      "design_state": "locked",
+      "software_artifact": "docs/architecture/DFR-01.md",
+      "software_test": null,
+      "physical_gate": "Interface/configuration review and radio test confirm the narrow heartbeat/fail-stop role.",
+      "validation_state": "design_only"
+    }
+  ]
+}
