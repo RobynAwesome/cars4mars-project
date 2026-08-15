@@ -1,0 +1,86 @@
+{
+  "baseline": "DFR-01",
+  "purpose": "Force engineering criticism to target assumptions, evidence, and measurements rather than presentation style.",
+  "questions": [
+    {
+      "id": "C4M-CHAL-001",
+      "question": "Show the torque calculation.",
+      "status": "calculated_lower_bound",
+      "answer": "At 30 kg on a 45 degree slope, F_parallel = m*g*sin(theta) = about 208.1 N. With 0.125 m wheel radius, the ideal total wheel torque to balance gravity is about 26.0 N.m before rolling resistance, skid-steer scrub, drivetrain losses, acceleration, obstacle impacts, unequal wheel loading, and safety margin.",
+      "artifact": "cars4mars/mechanics.py",
+      "test": "tests/test_mechanics.py",
+      "missing_evidence": "Motor rated/stall torque curve, drivetrain efficiency, traction coefficient, wheel-load distribution, and loaded ramp measurement.",
+      "next_gate": "Close motor torque margin from supplier datasheet, then perform instrumented 45 degree loaded test."
+    },
+    {
+      "id": "C4M-CHAL-002",
+      "question": "Why that motor?",
+      "status": "selection_rationale_incomplete",
+      "answer": "DFR-01 selects six Rhino IG52 24 V / 60 rpm / 100 W gearmotors, but the current source set does not contain enough verified motor-curve data to prove the selection margin against the 45 degree load case.",
+      "artifact": "docs/architecture/DFR-01.md",
+      "test": null,
+      "missing_evidence": "Authoritative datasheet for rated torque, stall torque/current, gearbox efficiency, thermal limits, shaft loading, and duty cycle.",
+      "next_gate": "Bind the exact supplier/manufacturer datasheet to the BOM and calculate torque/current/thermal margins before purchase release."
+    },
+    {
+      "id": "C4M-CHAL-003",
+      "question": "Why six wheels?",
+      "status": "design_rationale",
+      "answer": "The selected architecture distributes driven contact across six wheels and uses passive rocker-bogie articulation for uneven terrain while retaining compact skid-steer instead of a separate steering linkage. The competition terrain includes uneven surfaces, bumps up to 30 cm, and a ramp up to 45 degrees.",
+      "artifact": "docs/architecture/DFR-01.md",
+      "test": null,
+      "missing_evidence": "Measured wheel-load distribution, obstacle traversal, turning scrub current, and comparison against a simpler four-wheel architecture.",
+      "next_gate": "CAD/load analysis followed by loaded forward/reverse, turning, obstacle, and ramp tests."
+    },
+    {
+      "id": "C4M-CHAL-004",
+      "question": "What happens on heartbeat loss?",
+      "status": "software_tested_not_hardware_validated",
+      "answer": "The DFR-01 safety model removes non-zero motion when the command lease expires and removes motor enable when liveness expires. The current software boundary uses 500 ms timeouts. E-stop remains dominant and latched.",
+      "artifact": "firmware/teensy/include/safety_core.hpp",
+      "test": "GitHub Actions + host/embedded safety tests",
+      "missing_evidence": "Measured Teensy-to-contactor and wheel stop response on the assembled power stage.",
+      "next_gate": "Bench-test link loss while logging command age, motor-enable state, contactor state, wheel velocity, and stop time."
+    },
+    {
+      "id": "C4M-CHAL-005",
+      "question": "Where is the centre of mass?",
+      "status": "unknown",
+      "answer": "No authoritative centre-of-mass coordinate exists yet. DFR-01 places the payload low and central as a design intent, but without frozen component masses/positions or CAD mass properties, a numerical centre-of-mass claim would be fabricated.",
+      "artifact": "cars4mars/mechanics.py::center_of_mass_m",
+      "test": "tests/test_mechanics.py",
+      "missing_evidence": "Frozen CAD mass properties or measured component masses and coordinates, including battery, motors, compute, structure, payload tray, and 1 kg mission object case.",
+      "next_gate": "Generate CAD mass properties, then confirm as-built balance/scale measurements."
+    },
+    {
+      "id": "C4M-CHAL-006",
+      "question": "How is the payload retained?",
+      "status": "design_intent_not_physical_validation",
+      "answer": "DFR-01 specifies a low central 350 x 300 x 180 mm tray with raised sides and tie-down points for the judge-supplied object up to 1 kg.",
+      "artifact": "docs/architecture/DFR-01.md",
+      "test": null,
+      "missing_evidence": "Final retention geometry, fastener/tie-down specification, payload-shift limit, and physical loaded traversal evidence.",
+      "next_gate": "Freeze tray CAD and retain 1 kg through turns, bumps, ramp traversal, and emergency stop."
+    },
+    {
+      "id": "C4M-CHAL-007",
+      "question": "What's your current draw?",
+      "status": "unknown_measured_value",
+      "answer": "The design specifies a 24 V 20 Ah battery, 480 Wh nominal energy, and a 60 A master fuse. Actual rover current draw is not measured. The arithmetic 100 W / 24 V = 4.17 A per motor is valid only if the quoted 100 W is electrical input power; that assumption is not yet verified and must not be presented as expected or stall current.",
+      "artifact": "cars4mars/mechanics.py::current_from_power_a",
+      "test": "tests/test_mechanics.py",
+      "missing_evidence": "Motor datasheet current curve; compute/sensor rail budgets; DC/DC efficiency; idle, cruise, skid-turn, ramp, and stall-adjacent current measurements.",
+      "next_gate": "Build a source-backed power budget, then log battery and branch currents under defined bench/load conditions."
+    },
+    {
+      "id": "C4M-CHAL-008",
+      "question": "What fails first?",
+      "status": "unknown_requires_fmea_and_test",
+      "answer": "There is no defensible single first-failure claim before hardware tests. Current high-risk hypotheses are traction/slip on severe grade, motor/controller thermal or over-current stress during skid-turn/climb, power protection trip or voltage sag, communications loss, and payload shift. Communications loss is intentionally converted into a safe-stop behavior rather than continued motion.",
+      "artifact": "engineering/challenge_matrix.json",
+      "test": null,
+      "missing_evidence": "Component limits, FMEA ranking, thermal/current telemetry, traction measurements, communication range data, and payload dynamic tests.",
+      "next_gate": "Create FMEA, rank by severity/occurrence/detectability, then attack highest-risk failure modes first."
+    }
+  ]
+}
