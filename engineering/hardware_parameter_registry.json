@@ -1,0 +1,121 @@
+{
+  "schema": "cars4mars.hardware.parameters.v1",
+  "baseline": "DFR-01",
+  "status": "STAGED_NOT_RETESTED",
+  "truth_boundary": "This registry separates source-locked design inputs from model hypotheses and unresolved hardware quantities. No unresolved value may be silently promoted into a physical validation claim.",
+  "source_locked": {
+    "competition_max_width_m": 0.8,
+    "competition_max_length_m": 0.8,
+    "competition_max_height_m": 2.5,
+    "competition_max_mass_kg": 40.0,
+    "target_length_m": 0.7,
+    "target_width_m": 0.65,
+    "target_height_m": 0.5,
+    "bom_mass_target_kg": 28.0,
+    "engineering_load_case_kg": 30.0,
+    "wheel_count": 6,
+    "wheel_diameter_m": 0.25,
+    "wheel_radius_m": 0.125,
+    "drive_architecture": "six-wheel skid-steer with passive rocker-bogie",
+    "motor": {
+      "model": "Rhino IG52",
+      "quantity": 6,
+      "nominal_voltage_v": 24.0,
+      "nominal_speed_rpm": 60.0,
+      "label_power_w": 100.0,
+      "power_semantics_verified": false
+    },
+    "motor_driver": {
+      "model": "Cytron MDDS30",
+      "quantity": 3
+    },
+    "deterministic_controller": "Teensy 4.1",
+    "perception_compute": "Jetson Orin Nano Super",
+    "depth_camera": "Intel RealSense D455",
+    "lidar": "RPLIDAR A2M12",
+    "battery": {
+      "chemistry": "LiFePO4",
+      "nominal_voltage_v": 24.0,
+      "capacity_ah": 20.0,
+      "nominal_energy_wh": 480.0,
+      "master_fuse_a": 60.0,
+      "bms_present": true,
+      "contactor_present": true,
+      "estop_present": true
+    },
+    "payload": {
+      "mission_object_max_kg": 1.0,
+      "tray_length_m": 0.35,
+      "tray_width_m": 0.30,
+      "tray_height_m": 0.18,
+      "design_intent": "low central mount with raised sides and tie-down points"
+    },
+    "terrain": {
+      "bumps_max_expected_height_m": 0.30,
+      "bumps_max_expected_slope_deg": 30.0,
+      "hill_or_ramp_max_expected_height_m": 1.0,
+      "hill_or_ramp_max_expected_slope_deg": 45.0
+    },
+    "autonomy": {
+      "balloon_order": ["black", "white", "pink", "yellow", "blue"],
+      "stop_radius_m": 1.5,
+      "dwell_s": 5.0
+    },
+    "communications": {
+      "local_wifi_role": "command and video",
+      "lora_model": "RFM95W",
+      "lora_role": "heartbeat/fail-stop only"
+    }
+  },
+  "derived_but_not_physical_validation": {
+    "wheel_circumference_m": 0.7853981633974483,
+    "ideal_surface_speed_at_60rpm_mps": 0.7853981633974483,
+    "gravity_downslope_30kg_45deg_n": 208.101525703,
+    "normal_force_30kg_45deg_n": 208.101525703,
+    "ideal_gravity_balance_total_wheel_torque_nm": 26.012690713,
+    "ideal_equal_share_torque_per_wheel_nm": 4.335448452,
+    "payload_downslope_force_1kg_45deg_n": 6.936717523,
+    "conditional_six_motor_label_power_sum_w": 600.0,
+    "conditional_current_if_100w_is_electrical_input_per_motor_a": 25.0
+  },
+  "model_hypotheses_not_source_locked": {
+    "track_width_m": 0.56,
+    "track_width_note": "Existing skid-steer software default only; must be replaced by CAD/as-built measurement.",
+    "drivetrain_efficiency": null,
+    "rolling_resistance_coeff": null,
+    "skid_steer_scrub_resistance": null,
+    "tyre_surface_friction_coefficient": null,
+    "physical_braking_deceleration_mps2": null,
+    "contactor_open_delay_ms": null
+  },
+  "required_unknowns_before_next_test_tranche": [
+    "Exact Rhino IG52 manufacturer/supplier torque-speed curve for the selected part",
+    "Rated torque, stall torque, no-load/rated/stall current, gearbox efficiency, thermal and duty-cycle limits",
+    "MDDS30 configured current limits and protection behavior for the intended wiring",
+    "Battery/BMS continuous and peak current limits plus measured pack internal resistance/voltage sag",
+    "Final wheelbase, axle spacing, track width, rocker lengths, bogie lengths, pivot locations and ground clearance",
+    "Empty and +1 kg payload centre-of-mass coordinates from CAD or measured mass points",
+    "Tyre construction/compound and measured or source-backed traction coefficient on representative surfaces",
+    "Rolling resistance and skid-turn scrub resistance",
+    "Payload retention geometry, tie-down specification, fasteners and permitted payload displacement",
+    "Measured motor-enable/contact opening latency and wheel coast/braking profile",
+    "Jetson, camera, LiDAR, radio and DC/DC branch power/current budgets",
+    "Sensor mounting poses and fields of view for perception/navigation simulation"
+  ],
+  "governance": {
+    "next_tests_enabled": false,
+    "reason": "User explicitly requested that the next test tranche wait for additional hardware/context information.",
+    "allowed_now": [
+      "symbolic derivation",
+      "parameter registry",
+      "simulation contract design",
+      "unknown-state classification",
+      "cross-repository witness/interface design"
+    ],
+    "not_allowed_now": [
+      "new pass/fail stress execution",
+      "physical capability promotion",
+      "invented motor/current/COM/traction values"
+    ]
+  }
+}
