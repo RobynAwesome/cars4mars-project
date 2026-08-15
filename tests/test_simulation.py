@@ -72,7 +72,8 @@ class SimulationTests(unittest.TestCase):
         self.assertEqual(trace["schema"], "cars4mars.sim.trace.v1")
         self.assertEqual(len(trace["frames"]), 11)
         self.assertIn("truth_boundary", trace)
-        self.assertIn("pose" if False else "x_m", trace["frames"][0])
+        for key in ("x_m", "y_m", "z_m", "pitch_rad", "linear_mps", "state"):
+            self.assertIn(key, trace["frames"][0])
 
     def test_heartbeat_stop_envelope_is_analytic(self):
         trace = simulate_heartbeat_loss(
