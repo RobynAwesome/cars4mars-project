@@ -1,0 +1,33 @@
+{
+  "provenance_id": "C4M-PROV-XXXX",
+  "timestamp": "YYYY-MM-DDTHH:MM:SS+02:00",
+  "engineering_question": "What engineering question or hypothesis was being investigated?",
+  "ai": {
+    "used": true,
+    "role": "proposal|calculation_assistance|code_scaffold|review|visualisation|other",
+    "prompt_summary": "Preserve enough context for an auditor to understand what was asked; do not include secrets."
+  },
+  "human_decision": {
+    "owner": "REGISTERED_STUDENT_OWNER",
+    "decision": "accept|modify|reject|defer",
+    "reason": "Why the proposal was accepted, changed, rejected, or deferred."
+  },
+  "engineering_artifact": {
+    "paths": ["path/to/artifact"],
+    "commit": "GIT_SHA"
+  },
+  "test": {
+    "type": "unit|simulation|static_review|bench|integrated|none",
+    "reference": "TEST_OR_CI_REFERENCE",
+    "result": "pass|fail|not_run"
+  },
+  "measurement": {
+    "required": true,
+    "reference": null,
+    "conditions": null,
+    "result": "not_measured"
+  },
+  "claim_state": "proposed|designed|software_tested|bench_tested|integrated_tested|validated",
+  "final_decision": "hold|pass|fail|redesign",
+  "next_gate": "What must happen next before the claim advances?"
+}
