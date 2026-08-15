@@ -15,15 +15,20 @@ from cars4mars.mechanics import (
 
 class MechanicsTests(unittest.TestCase):
     def test_dfr01_45_degree_downslope_force(self):
-        self.assertAlmostEqual(downslope_force_n(30.0, 45.0), 208.101, places=3)
+        # 30 * 9.81 * sin(45 deg) = 208.101525703... N.
+        self.assertAlmostEqual(downslope_force_n(30.0, 45.0), 208.101526, places=6)
 
     def test_dfr01_45_degree_ideal_total_wheel_torque(self):
         torque = ideal_total_wheel_torque_nm(30.0, 45.0, 0.125)
-        self.assertAlmostEqual(torque, 26.013, places=3)
+        # 208.101525703... N * 0.125 m = 26.012690713... N.m.
+        self.assertAlmostEqual(torque, 26.012691, places=6)
 
     def test_equal_share_is_arithmetic_not_load_transfer_model(self):
         torque = ideal_total_wheel_torque_nm(30.0, 45.0, 0.125)
-        self.assertAlmostEqual(ideal_equal_share_torque_nm(torque, 6), 4.3355, places=4)
+        # Equal share is only arithmetic. Real rocker-bogie wheel loads are not assumed equal.
+        self.assertAlmostEqual(
+            ideal_equal_share_torque_nm(torque, 6), 4.335448, places=6
+        )
 
     def test_45_degree_static_slope_needs_ideal_mu_one(self):
         self.assertAlmostEqual(minimum_friction_coefficient_for_static_slope(45.0), 1.0, places=9)
