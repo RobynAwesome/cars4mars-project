@@ -29,11 +29,12 @@ jobs:
         run: |
           rm -rf /tmp/cars4mars-sim
           python tools/run_simulations.py --out /tmp/cars4mars-sim
-          test -s /tmp/cars4mars-sim/grade45_ideal_lower_bound.json
-          test -s /tmp/cars4mars-sim/grade45_lossy_hypothesis.json
-          test -s /tmp/cars4mars-sim/grade45_traction_limited.json
-          test -s /tmp/cars4mars-sim/heartbeat_loss_stop_envelope.json
-          test -s /tmp/cars4mars-sim/grade45_sensitivity.json
+          test -s /tmp/cars4mars-sim/scenario_contract.json
+          test -s /tmp/cars4mars-sim/grade45-ideal-lower-bound.json
+          test -s /tmp/cars4mars-sim/grade45-lossy-hypothesis.json
+          test -s /tmp/cars4mars-sim/grade45-traction-limited.json
+          test -s /tmp/cars4mars-sim/heartbeat-loss-stop-envelope.json
+          test -s /tmp/cars4mars-sim/grade45-sensitivity.json
 
       - name: Compile and run embedded protocol golden vector
         run: |
