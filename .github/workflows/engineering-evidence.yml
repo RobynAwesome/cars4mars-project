@@ -22,8 +22,13 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Run deterministic control tests
+      - name: Run deterministic software tests
         run: python -m unittest discover -s tests -v
+
+      - name: Compile and run embedded protocol golden vector
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror firmware/teensy/native_test.cpp -o /tmp/c4m_protocol_test
+          /tmp/c4m_protocol_test
 
       - name: Validate requirements and evidence ledger
         run: python tools/validate_evidence.py
