@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - engineering/**
+      - agent/hardware-math-staging
   pull_request:
 
 permissions:
@@ -35,6 +36,27 @@ jobs:
           test -s /tmp/cars4mars-sim/grade45-traction-limited.json
           test -s /tmp/cars4mars-sim/heartbeat-loss-stop-envelope.json
           test -s /tmp/cars4mars-sim/grade45-sensitivity.json
+
+      - name: Run bounded uncertainty tranche
+        run: |
+          rm -rf /tmp/cars4mars-uncertainty
+          python tools/run_uncertainty_tranche.py --out /tmp/cars4mars-uncertainty/uncertainty-tranche.json
+          test -s /tmp/cars4mars-uncertainty/uncertainty-tranche.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/cars4mars-uncertainty/uncertainty-tranche.json'))
+          assert p['mode']=='BOUNDED_UNCERTAINTY_ONLY'
+          assert p['hard_invariant']=='MODEL PASS != PHYSICAL PASS'
+          assert set(p['sections']) == {
+              'drivetrain_grade_45deg',
+              'watchdog_stop_envelope',
+              'static_cross_slope_stability',
+              'payload_retention_demand',
+          }
+          allowed={'ROBUST_PASS','MIXED_HOLD','ROBUST_FAIL'}
+          assert all(s['classification'] in allowed for s in p['sections'].values())
+          assert p['physical_validation_measurements_remaining']
+          PY
 
       - name: Compile and run embedded protocol golden vector
         run: |
