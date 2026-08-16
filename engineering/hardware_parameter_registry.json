@@ -67,6 +67,65 @@
       "lora_role": "heartbeat/fail-stop only"
     }
   },
+  "primary_source_evidence": {
+    "status": "SOURCE_BACKED_NOT_INTEGRATION_VALIDATED",
+    "researched_at": "2026-08-16",
+    "motor_driver": {
+      "model": "Cytron MDDS30",
+      "manufacturer_source": "https://www.cytron.io/p-30amp-7v-35v-smartdrive-dc-motor-driver-2-channels",
+      "motor_supply_range_v": [7.0, 35.0],
+      "continuous_current_per_channel_a": 30.0,
+      "peak_current_per_channel_a": 80.0,
+      "peak_duration_s": 1.0,
+      "switching_frequency_khz": 18.0,
+      "protections": ["under-voltage warning", "over-voltage protection", "over-temperature protection", "thermal protection", "current limit protection"],
+      "motor_supply_reverse_polarity_protection": false,
+      "integration_unknowns_preserved": ["actual DIP/control configuration", "configured/effective current limiting behavior", "cooling installation", "wire/fuse/channel allocation under six-motor load"]
+    },
+    "perception_compute": {
+      "model": "NVIDIA Jetson Orin Nano Super",
+      "manufacturer_source": "https://developer.nvidia.com/blog/nvidia-jetson-orin-nano-developer-kit-gets-a-super-boost/",
+      "reference_power_modes_w": [7.0, 15.0, 25.0],
+      "note": "Reference/module power modes are not the rover DC/DC input-current budget. Actual configured mode, converter efficiency, branch current and thermal margin remain integration measurements."
+    },
+    "lidar": {
+      "model": "SLAMTEC RPLIDAR A2M12",
+      "manufacturer_source": "https://www.slamtec.com/en/lidar/a2spec",
+      "system_voltage_v": 5.0,
+      "system_current_a": [0.45, 0.60],
+      "power_consumption_w": [2.25, 3.0],
+      "measuring_range_m": [0.2, 12.0],
+      "sampling_frequency_hz": 16000,
+      "rotation_nominal_hz": 10.0,
+      "rotation_range_hz": [5.0, 15.0],
+      "angular_resolution_deg": 0.225,
+      "angular_range_deg": 360.0,
+      "uart_baud": 256000,
+      "integration_unknowns_preserved": ["sensor pose", "occlusion", "DC/DC branch efficiency", "measured in-rover voltage/current"]
+    },
+    "depth_camera": {
+      "model": "RealSense D455",
+      "manufacturer_source": "https://www.realsenseai.com/products/real-sense-depth-camera-d455f/",
+      "depth_fov_deg": [87.0, 58.0],
+      "ideal_range_m": [0.6, 6.0],
+      "global_shutter": true,
+      "depth_error_claim": "<2% at 4 m under manufacturer conditions",
+      "integration_unknowns_preserved": ["sensor pose", "field-of-view occlusion after mounting", "USB branch power/current", "measured in-rover bandwidth/power"]
+    },
+    "deterministic_controller": {
+      "model": "Teensy 4.1",
+      "manufacturer_source": "https://www.pjrc.com/store/teensy41.html",
+      "vin_v": 5.0,
+      "logic_v": 3.3,
+      "external_3v3_recommended_max_a": 0.25,
+      "integration_unknowns_preserved": ["actual board current in rover firmware state", "USB/VIN isolation choice", "peripheral load on 3.3V rail"]
+    },
+    "motor": {
+      "model": "Rhino IG52 24V 60rpm 100W",
+      "primary_source_status": "NOT_FOUND_FOR_EXACT_PURCHASED_PART",
+      "rule": "Retailer/spec-sheet candidates must not be promoted into source_locked torque/current/thermal values until the exact purchased part is positively matched to an authoritative supplier/manufacturer document."
+    }
+  },
   "derived_but_not_physical_validation": {
     "wheel_circumference_m": 0.7853981633974483,
     "ideal_surface_speed_at_60rpm_mps": 0.7853981633974483,
@@ -90,8 +149,8 @@
   },
   "required_unknowns_before_next_test_tranche": [
     "Exact Rhino IG52 manufacturer/supplier torque-speed curve for the selected part",
-    "Rated torque, stall torque, no-load/rated/stall current, gearbox efficiency, thermal and duty-cycle limits",
-    "MDDS30 configured current limits and protection behavior for the intended wiring",
+    "Rated torque, stall torque, no-load/rated/stall current, gearbox efficiency, thermal and duty-cycle limits for the exact Rhino IG52 part",
+    "MDDS30 actual configured control mode/current limiting/protection behavior for the intended six-motor wiring",
     "Battery/BMS continuous and peak current limits plus measured pack internal resistance/voltage sag",
     "Final wheelbase, axle spacing, track width, rocker lengths, bogie lengths, pivot locations and ground clearance",
     "Empty and +1 kg payload centre-of-mass coordinates from CAD or measured mass points",
@@ -99,8 +158,8 @@
     "Rolling resistance and skid-turn scrub resistance",
     "Payload retention geometry, tie-down specification, fasteners and permitted payload displacement",
     "Measured motor-enable/contact opening latency and wheel coast/braking profile",
-    "Jetson, camera, LiDAR, radio and DC/DC branch power/current budgets",
-    "Sensor mounting poses and fields of view for perception/navigation simulation"
+    "Jetson configured power mode plus measured DC/DC efficiency/current and camera/controller branch power/current budgets",
+    "Final D455/A2M12 mounting poses and measured fields of view after rover integration"
   ],
   "governance": {
     "next_tests_enabled": false,
@@ -110,7 +169,8 @@
       "parameter registry",
       "simulation contract design",
       "unknown-state classification",
-      "cross-repository witness/interface design"
+      "cross-repository witness/interface design",
+      "primary-source hardware research"
     ],
     "not_allowed_now": [
       "new pass/fail stress execution",
