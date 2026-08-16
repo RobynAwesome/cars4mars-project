@@ -1,8 +1,8 @@
 {
-  "schema": "cars4mars.hardware.parameters.v1",
+  "schema": "cars4mars.hardware.parameters.v2",
   "baseline": "DFR-01",
-  "status": "STAGED_NOT_RETESTED",
-  "truth_boundary": "This registry separates source-locked design inputs from model hypotheses and unresolved hardware quantities. No unresolved value may be silently promoted into a physical validation claim.",
+  "status": "BOUNDED_UNCERTAINTY_TRANCHE_ENABLED",
+  "truth_boundary": "Source-backed facts, measured integration values and exploratory hypothesis ranges are separate classes. Hypothesis ranges may drive sensitivity analysis but can never be promoted into physical capability claims.",
   "source_locked": {
     "competition_max_width_m": 0.8,
     "competition_max_length_m": 0.8,
@@ -79,14 +79,12 @@
       "peak_duration_s": 1.0,
       "switching_frequency_khz": 18.0,
       "protections": ["under-voltage warning", "over-voltage protection", "over-temperature protection", "thermal protection", "current limit protection"],
-      "motor_supply_reverse_polarity_protection": false,
-      "integration_unknowns_preserved": ["actual DIP/control configuration", "configured/effective current limiting behavior", "cooling installation", "wire/fuse/channel allocation under six-motor load"]
+      "motor_supply_reverse_polarity_protection": false
     },
     "perception_compute": {
       "model": "NVIDIA Jetson Orin Nano Super",
       "manufacturer_source": "https://developer.nvidia.com/blog/nvidia-jetson-orin-nano-developer-kit-gets-a-super-boost/",
-      "reference_power_modes_w": [7.0, 15.0, 25.0],
-      "note": "Reference/module power modes are not the rover DC/DC input-current budget. Actual configured mode, converter efficiency, branch current and thermal margin remain integration measurements."
+      "reference_power_modes_w": [7.0, 15.0, 25.0]
     },
     "lidar": {
       "model": "SLAMTEC RPLIDAR A2M12",
@@ -100,8 +98,7 @@
       "rotation_range_hz": [5.0, 15.0],
       "angular_resolution_deg": 0.225,
       "angular_range_deg": 360.0,
-      "uart_baud": 256000,
-      "integration_unknowns_preserved": ["sensor pose", "occlusion", "DC/DC branch efficiency", "measured in-rover voltage/current"]
+      "uart_baud": 256000
     },
     "depth_camera": {
       "model": "RealSense D455",
@@ -109,21 +106,19 @@
       "depth_fov_deg": [87.0, 58.0],
       "ideal_range_m": [0.6, 6.0],
       "global_shutter": true,
-      "depth_error_claim": "<2% at 4 m under manufacturer conditions",
-      "integration_unknowns_preserved": ["sensor pose", "field-of-view occlusion after mounting", "USB branch power/current", "measured in-rover bandwidth/power"]
+      "depth_error_claim": "<2% at 4 m under manufacturer conditions"
     },
     "deterministic_controller": {
       "model": "Teensy 4.1",
       "manufacturer_source": "https://www.pjrc.com/store/teensy41.html",
       "vin_v": 5.0,
       "logic_v": 3.3,
-      "external_3v3_recommended_max_a": 0.25,
-      "integration_unknowns_preserved": ["actual board current in rover firmware state", "USB/VIN isolation choice", "peripheral load on 3.3V rail"]
+      "external_3v3_recommended_max_a": 0.25
     },
     "motor": {
       "model": "Rhino IG52 24V 60rpm 100W",
       "primary_source_status": "NOT_FOUND_FOR_EXACT_PURCHASED_PART",
-      "rule": "Retailer/spec-sheet candidates must not be promoted into source_locked torque/current/thermal values until the exact purchased part is positively matched to an authoritative supplier/manufacturer document."
+      "rule": "No torque/current/thermal value is source-locked until the exact purchased part is positively matched to an authoritative document."
     }
   },
   "derived_but_not_physical_validation": {
@@ -137,45 +132,47 @@
     "conditional_six_motor_label_power_sum_w": 600.0,
     "conditional_current_if_100w_is_electrical_input_per_motor_a": 25.0
   },
-  "model_hypotheses_not_source_locked": {
-    "track_width_m": 0.56,
-    "track_width_note": "Existing skid-steer software default only; must be replaced by CAD/as-built measurement.",
-    "drivetrain_efficiency": null,
-    "rolling_resistance_coeff": null,
-    "skid_steer_scrub_resistance": null,
-    "tyre_surface_friction_coefficient": null,
-    "physical_braking_deceleration_mps2": null,
-    "contactor_open_delay_ms": null
+  "hypothesis_envelopes": {
+    "purpose": "Deterministic sensitivity bounds only. These are deliberately not manufacturer specifications, CAD measurements or physical-test evidence.",
+    "total_drive_torque_nm": [20.0, 26.012690713, 32.0, 40.0, 50.0, 60.0],
+    "drivetrain_efficiency": [0.55, 0.70, 0.85],
+    "traction_mu": [0.30, 0.50, 0.70],
+    "rolling_resistance_coeff": [0.02, 0.05, 0.10],
+    "physical_braking_deceleration_mps2": [0.20, 0.50, 1.00, 2.00],
+    "track_width_m": [0.45, 0.56, 0.60],
+    "cg_height_m": [0.15, 0.25, 0.35, 0.45],
+    "payload_cg_shift_longitudinal_m": [-0.10, -0.05, 0.0, 0.05, 0.10],
+    "sensor_pose_uncertainty_m": [0.01, 0.03, 0.05],
+    "sensor_yaw_uncertainty_deg": [1.0, 3.0, 5.0]
   },
-  "required_unknowns_before_next_test_tranche": [
-    "Exact Rhino IG52 manufacturer/supplier torque-speed curve for the selected part",
-    "Rated torque, stall torque, no-load/rated/stall current, gearbox efficiency, thermal and duty-cycle limits for the exact Rhino IG52 part",
+  "physical_validation_measurements": [
+    "Exact Rhino IG52 manufacturer/supplier torque-speed/current/thermal data for the purchased part",
     "MDDS30 actual configured control mode/current limiting/protection behavior for the intended six-motor wiring",
     "Battery/BMS continuous and peak current limits plus measured pack internal resistance/voltage sag",
     "Final wheelbase, axle spacing, track width, rocker lengths, bogie lengths, pivot locations and ground clearance",
     "Empty and +1 kg payload centre-of-mass coordinates from CAD or measured mass points",
-    "Tyre construction/compound and measured or source-backed traction coefficient on representative surfaces",
-    "Rolling resistance and skid-turn scrub resistance",
+    "Tyre construction/compound plus measured traction, rolling resistance and skid-turn scrub on representative surfaces",
     "Payload retention geometry, tie-down specification, fasteners and permitted payload displacement",
     "Measured motor-enable/contact opening latency and wheel coast/braking profile",
     "Jetson configured power mode plus measured DC/DC efficiency/current and camera/controller branch power/current budgets",
-    "Final D455/A2M12 mounting poses and measured fields of view after rover integration"
+    "Final D455/A2M12 mounting poses, calibration and measured fields of view after integration"
   ],
   "governance": {
-    "next_tests_enabled": false,
-    "reason": "User explicitly requested that the next test tranche wait for additional hardware/context information.",
+    "owner_supersession": "2026-08-16: owner directed that all listed issues be solved; the former blanket simulation freeze is replaced by a bounded-uncertainty tranche while physical claims remain gated.",
+    "next_tests_enabled": true,
+    "enabled_mode": "BOUNDED_UNCERTAINTY_ONLY",
     "allowed_now": [
-      "symbolic derivation",
-      "parameter registry",
-      "simulation contract design",
-      "unknown-state classification",
-      "cross-repository witness/interface design",
-      "primary-source hardware research"
+      "source-backed deterministic calculation",
+      "hypothesis envelope sweeps",
+      "sensitivity analysis",
+      "model-level PASS/HOLD/FAIL classification",
+      "simulation witnesses that preserve provenance class"
     ],
-    "not_allowed_now": [
-      "new pass/fail stress execution",
-      "physical capability promotion",
-      "invented motor/current/COM/traction values"
+    "still_forbidden": [
+      "promoting hypothesis values into source-locked hardware specifications",
+      "claiming physical rover validation from simulation",
+      "claiming exact motor current/torque/thermal behavior without exact part evidence",
+      "claiming as-built geometry, CoM, traction or stopping behavior before measurement"
     ]
   }
 }
