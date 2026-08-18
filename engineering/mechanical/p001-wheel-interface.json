@@ -1,0 +1,93 @@
+{
+  "schema": "cars4mars.mechanical.p-step.v1",
+  "part_id": "P-001",
+  "name": "wheel_interface",
+  "timestamp": "2026-08-18T19:17:00+02:00",
+  "baseline": "DFR-01",
+  "evidence_state": "GENERATED_CONCEPT_REQUIRES_DIMENSIONING",
+  "apu": "YELLOW",
+  "authority_effect": "none",
+  "locked": {
+    "wheel_count": 6,
+    "wheel_outer_diameter_mm": 250,
+    "mobility": "six-wheel skid-steer + passive rocker-bogie",
+    "engineering_load_case_kg": 30
+  },
+  "interface_law": {
+    "wheel_mounts_to": "wheel_hub",
+    "axle_shaft_interface_owner": "wheel_hub_and_bearing_stack",
+    "bare_wheel_shell_is_precision_axle_bearing_surface": false,
+    "removable_fastener_interface_required": true
+  },
+  "concept_features": {
+    "open_spokes": true,
+    "central_hub_mounting_face": true,
+    "center_clearance_bore": true,
+    "replaceable_tread_insert_pockets": true
+  },
+  "tbd": [
+    "wheel_width_mm",
+    "spoke_count",
+    "spoke_thickness_mm",
+    "hub_mounting_face_diameter_mm",
+    "center_bore_diameter_mm",
+    "bolt_count",
+    "bolt_pitch_circle_diameter_mm",
+    "fastener_diameter_and_thread",
+    "axle_shaft_diameter_mm",
+    "bearing_dimensions_mm",
+    "tread_pocket_count",
+    "tread_pocket_dimensions_mm",
+    "insert_retention_method",
+    "print_tolerance_mm"
+  ],
+  "material_candidates": {
+    "wheel_body_first_fit": ["PLA", "PETG"],
+    "traction_insert": ["TPU", "rubber-like material"],
+    "later_strength_candidate": ["nylon", "reinforced filament"],
+    "final_material_locked": false
+  },
+  "required_views": ["rough_hand_sketch", "front", "side", "top_or_section"],
+  "substeps": [
+    {
+      "id": "P-001A",
+      "name": "dimension_interface",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "P-001B",
+      "name": "hub_bolt_pattern_coupon",
+      "status": "BLOCKED_BY_P001A"
+    },
+    {
+      "id": "P-001C",
+      "name": "tread_insert_coupon",
+      "status": "BLOCKED_BY_P001A"
+    },
+    {
+      "id": "P-001D",
+      "name": "full_wheel_prototype",
+      "status": "BLOCKED_BY_COUPON_TESTS"
+    }
+  ],
+  "promotion_ladder": [
+    "GENERATED",
+    "DIMENSIONED",
+    "CAD_RELEASED",
+    "SLICED_OR_TOOLPATH_REVIEWED",
+    "FABRICATED",
+    "FIT_TESTED",
+    "ROLL_TESTED",
+    "LOAD_TESTED",
+    "ACCEPTED_OR_REVISE"
+  ],
+  "crud": {
+    "operation": "CREATE",
+    "target": "engineering/mechanical/P-001",
+    "decision": "HOLD_AT_NON_AUTHORITATIVE_PROTOTYPE_STATE"
+  },
+  "swfus": {
+    "distribution_allowed": false,
+    "reason": "POC/FOC gate has not passed for a physical state transition"
+  }
+}

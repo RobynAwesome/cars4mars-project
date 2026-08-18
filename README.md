@@ -2,7 +2,7 @@
 
 > **Current state:** DFR-01 is a locked design baseline. Procurement, fabrication, integration, and physical testing are incomplete.
 >
-> **Truth boundary:** code, calculations, diagrams, and simulations in this repository are engineering artifacts. They are **not** evidence that the physical rover has been built, integrated, tested, or validated.
+> **Truth boundary:** code, calculations, diagrams, generated images, and simulations in this repository are engineering artifacts. They are **not** evidence that the physical rover has been built, integrated, tested, or validated.
 
 ## Purpose
 
@@ -51,6 +51,28 @@ No state is advanced without a dated artifact. Examples:
 
 Failures remain part of the record. Corrections create a new versioned decision; they do not delete the earlier failure.
 
+## Physical build transition — 18 August 2026
+
+The project has entered a **small-piece physical-design phase** at the HPI d-school fabrication / 3D lab. The session established access to the lab workflow, including LightBurn 2, and generated new axle/wheel design-reference boards.
+
+That is a **facility and design-state update only**. It is not proof that a wheel, axle, hub, rocker-bogie assembly, chassis, or rover has been fabricated.
+
+The current active mechanical gate is:
+
+`P-001A — dimension the 250 mm wheel / wheel-hub interface before printing.`
+
+See:
+
+- `engineering/mechanical/P-001_WHEEL_INTERFACE.md`
+- `engineering/mechanical/p001-wheel-interface.json`
+- `evidence/ledger.ndjson` → `C4M-MECH-0001`
+
+The P-step sequence is intentionally narrow:
+
+`P-001 wheel → P-002 hub → P-003 axle shaft → P-004 bearing housing → P-005 mounting bracket → P-006 rocker/bogie link → P-007 dry assembly → P-008 rolling/load prototype`
+
+Generated geometry may propose changeable prototype values; it may not overwrite DFR-01 locked constraints or manufacture physical evidence.
+
 ## Minimum reliable mission chain
 
 `POWER → DRIVE → CONTROL → VIDEO → PAYLOAD → DETECTION → AUTONOMY`
@@ -66,11 +88,12 @@ The first engineering tranche is intentionally narrow:
 3. host-side tests for watchdog, E-stop, invalid input, and bounded commands
 4. evidence-record schema and ledger
 5. CI that proves the software tests run on every change
-6. later: Teensy firmware, Jetson perception, CAD, wiring, BOM/procurement receipts, and physical test records
+6. bounded physical part prototypes with dimensioned interfaces and receipts
+7. later: Teensy firmware, Jetson perception, CAD, wiring, BOM/procurement receipts, and integrated physical test records
 
 ## AI orchestration disclosure
 
-AI may assist with source synthesis, code proposals, documentation, simulation scaffolding, and review. Every accepted engineering artifact must still have:
+AI may assist with source synthesis, code proposals, documentation, simulation scaffolding, generated design references, and review. Every accepted engineering artifact must still have:
 
 - an accountable human owner,
 - a version/commit,
@@ -86,5 +109,6 @@ DFR-01 responds to the Cars4Mars African Rover Challenge 2026 requirements. The 
 ---
 
 **Baseline:** DFR-01 — 02 August 2026  
+**Physical-build P-step opened:** 18 August 2026  
 **Repository initialized:** 15 August 2026  
 **Team:** Kopano Labs / Cape Peninsula University of Technology
