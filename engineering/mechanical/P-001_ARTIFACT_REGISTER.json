@@ -1,0 +1,127 @@
+{
+  "schema": "cars4mars.p001.artifact-register.v1",
+  "observed_at": "2026-08-18T19:17:00+02:00",
+  "baseline": "DFR-01",
+  "part_id": "P-001",
+  "active_gate": "P-001A_dimension_wheel_hub_interface",
+  "truth_boundary": "Artifact registration preserves identity and provenance; it does not promote physical state.",
+  "artifacts": [
+    {
+      "name": "Cars4Mars Axle Module Concept Board",
+      "filename": "cars4mars_axle_module_concept_board.png",
+      "media_type": "image/png",
+      "pixel_dimensions": [1448, 1086],
+      "bytes": 2279910,
+      "sha256": "d984850dc85cce87a5f5ca19f51279d6624d93b1ae8c64048b67a79a017bbb26",
+      "classification": "GENERATED_DESIGN_REFERENCE",
+      "physical_evidence": false,
+      "storage_status": "session_artifact_not_committed_to_repository",
+      "use": [
+        "mechanical decomposition discussion",
+        "axle / bearing / hub relationship discussion",
+        "design-team orientation"
+      ],
+      "must_not_be_used_as": [
+        "dimensioned CAD",
+        "slicer or LightBurn toolpath",
+        "fabrication evidence",
+        "measured assembly evidence"
+      ]
+    },
+    {
+      "name": "Cars4Mars Axle Module Assembly Guide",
+      "filename": "cars4mars_axle_module_assembly_guide.png",
+      "media_type": "image/png",
+      "pixel_dimensions": [1448, 1086],
+      "bytes": 1773532,
+      "sha256": "73d2236c7b8dffe0973aac5b76e7623af6990239217274ed758a6fe9e6896073",
+      "classification": "GENERATED_DESIGN_REFERENCE",
+      "physical_evidence": false,
+      "storage_status": "session_artifact_not_committed_to_repository",
+      "use": [
+        "P-step decomposition",
+        "assembly-order discussion",
+        "front / side / top view planning"
+      ],
+      "must_not_be_used_as": [
+        "hidden source of dimensions",
+        "fabrication release",
+        "physical fit evidence"
+      ]
+    },
+    {
+      "name": "Cars4Mars Part 1 - Wheel Concept Poster",
+      "filename": "cars4mars_wheel_concept_poster.png",
+      "media_type": "image/png",
+      "pixel_dimensions": [1448, 1086],
+      "bytes": 1771778,
+      "sha256": "9750117f4d658ab9d8cf972ec8460cf0d34c44ef72d0f7b20cba262ed8dc78fe",
+      "classification": "GENERATED_DESIGN_REFERENCE",
+      "physical_evidence": false,
+      "storage_status": "session_artifact_not_committed_to_repository",
+      "use": [
+        "P-001 wheel geometry discussion",
+        "wheel-to-hub interface orientation",
+        "replaceable tread-insert hypothesis"
+      ],
+      "must_not_be_used_as": [
+        "final material selection",
+        "final bolt pattern",
+        "final bore dimension",
+        "final tread-pocket dimension",
+        "print-ready CAD"
+      ]
+    },
+    {
+      "name": "HPI d-school lab exterior/session photo 1",
+      "filename": "1000159234.jpg",
+      "media_type": "image/jpeg",
+      "pixel_dimensions": [864, 1536],
+      "bytes": 205124,
+      "sha256": "0a99b9ca82ebb90392b377bc76157116ae3f7118a78cf948773b0334ec648eb4",
+      "classification": "FACILITY_CONTEXT_PHOTO",
+      "physical_evidence": false,
+      "storage_status": "session_artifact_not_committed_to_repository",
+      "use": ["location/session provenance"],
+      "must_not_be_used_as": ["fabricated-part evidence", "tool calibration evidence"]
+    },
+    {
+      "name": "HPI d-school lab interior/session photo 2",
+      "filename": "1000159239.jpg",
+      "media_type": "image/jpeg",
+      "pixel_dimensions": [1152, 1536],
+      "bytes": 199502,
+      "sha256": "4a0007a24d1d304678b04ef840d7719ce7e3b39bedc6679e4fbde99b4e834584",
+      "classification": "FACILITY_CONTEXT_PHOTO",
+      "physical_evidence": false,
+      "storage_status": "session_artifact_not_committed_to_repository",
+      "use": ["lab-session provenance"],
+      "must_not_be_used_as": ["fabricated-part evidence", "tool calibration evidence"]
+    }
+  ],
+  "facility_observation": {
+    "location": "HPI d-school fabrication / 3D lab",
+    "lightburn_2": "available_in_session_context",
+    "classification": "FACILITY_CONTEXT_ONLY",
+    "does_not_prove": [
+      "laser cutter model or calibration",
+      "3D printer model or calibration",
+      "material stock suitability",
+      "fabricated wheel",
+      "fabricated axle",
+      "physical rover assembly"
+    ]
+  },
+  "next_capture": {
+    "required": [
+      "rough_hand_sketch",
+      "front_view",
+      "side_view",
+      "top_or_section_view",
+      "actual_printer_or_fabrication_machine_identity",
+      "actual_available_material_identity",
+      "proposed_interface_dimensions"
+    ],
+    "release_rule": "Do not release a full 250 mm wheel for fabrication until P-001A dimensions and a small fit-coupon plan exist."
+  }
+}
